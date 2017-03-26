@@ -2,5 +2,5 @@
     <string name="app_name">MigraineTracker</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="journal_title">Add A Journal Entry</string>
 </resources>
