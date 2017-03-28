@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.Toast;
 
@@ -18,7 +19,7 @@ import static android.widget.Toast.makeText;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link CalendarFragment.OnFragmentInteractionListener} interface
+ * {@link CalendarFragment.OnEditJournalEntryListener} interface
  * to handle interaction events.
  * Use the {@link CalendarFragment# newInstance} factory method to
  * create an instance of this fragment.
@@ -27,8 +28,9 @@ public class CalendarFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private CalendarView mCalendarView;
+    private Button mEditJournalButton;
 
-    private OnFragmentInteractionListener mListener;
+    private OnEditJournalEntryListener mListener;
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -57,6 +59,15 @@ public class CalendarFragment extends Fragment {
             }
         });
 
+        mEditJournalButton = (Button) mCalendarFragmentView.findViewById(R.id.edit_journal_button);
+
+        mEditJournalButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonPressed(Uri.parse("http://test.com"));
+            }
+        });
+
         // Inflate the layout for this fragment
         return mCalendarFragmentView;
     }
@@ -64,15 +75,18 @@ public class CalendarFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onEditJournal(uri);
+        }
+        else {
+            Log.d("mListener","mListener set to null");
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnEditJournalEntryListener) {
+            mListener = (OnEditJournalEntryListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -95,8 +109,8 @@ public class CalendarFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnEditJournalEntryListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onEditJournal(Uri uri);
     }
 }

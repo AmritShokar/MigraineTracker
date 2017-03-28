@@ -10,15 +10,18 @@ import android.util.Log;
 
 import ca.amritpal.migrainetracker.R;
 import ca.amritpal.migrainetracker.ui.calendar.CalendarFragment;
+import ca.amritpal.migrainetracker.ui.entry.JournalFragment;
 
-public class MainActivity extends AppCompatActivity implements CalendarFragment.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements CalendarFragment.OnEditJournalEntryListener, JournalFragment.OnFinishedJournalEntryListener{
+
+    FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         fragmentTransaction.replace(R.id.main_layout_container, new CalendarFragment());
@@ -56,7 +59,15 @@ public class MainActivity extends AppCompatActivity implements CalendarFragment.
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-        Log.d("FragmentInteraction","test");
+    public void onEditJournal(Uri uri) {
+        Log.d("FragmentInteraction","Calendar test succeeded");
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_layout_container, new JournalFragment());
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onFinishedEntry(Uri uri) {
+        Log.d("FragmentInteraction","Journal test succeeded");
     }
 }

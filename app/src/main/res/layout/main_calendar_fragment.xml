@@ -28,9 +28,14 @@
         android:id="@+id/tester"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="49"
+        android:layout_weight="39"
         android:text="@string/journal_title"
         />
+    <Button
+        android:id="@+id/edit_journal_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"/>
 
 
 
