@@ -1,18 +1,40 @@
 <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/lib/ca.amritpal.migrainetracker"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="ca.amritpal.migrainetracker.ui.entry.JournalFragment"
     >
 
     <TextView
         android:id="@+id/journal_entry_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/tester_fragment_text"
-        app:layout_heightPercentage="50%"
-        android:background="@color/colorPrimaryDark"
+        android:layout_height="0dp"
+        android:text="@string/journal_entry_title"
+        android:textAlignment="center"
+        app:layout_heightPercent="5%"
         />
+
+    <TextView
+        android:id="@+id/journal_entry_date"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:textAlignment="center"
+        app:layout_heightPercent="5%"
+        android:layout_below="@id/journal_entry_title"/>
+
+    <SeekBar
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="5%"
+        android:max="10"
+        android:progress="0"
+        android:layout_below="@+id/journal_entry_date"
+        android:id="@+id/mood_slider"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </android.support.percent.PercentRelativeLayout>

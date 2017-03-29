@@ -7,6 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import ca.amritpal.migrainetracker.R;
 
@@ -22,6 +26,7 @@ public class JournalFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
 
     private OnFinishedJournalEntryListener mListener;
+    private TextView mDateView;
 
     public JournalFragment() {
         // Required empty public constructor
@@ -36,8 +41,17 @@ public class JournalFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.journal_fragment, container, false);
+
+        mDateView = (TextView) view.findViewById(R.id.journal_entry_date);
+        Calendar currDate = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("E MMM dd, yyyy");
+        String currDateText = sdf.format(currDate.getTime());
+        mDateView.setText(currDateText);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.journal_fragment, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
