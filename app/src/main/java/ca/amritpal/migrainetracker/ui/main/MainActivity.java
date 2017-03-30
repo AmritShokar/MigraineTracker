@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements CalendarFragment.
         Log.d("FragmentInteraction","Calendar test succeeded");
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.main_layout_container, new JournalFragment());
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 

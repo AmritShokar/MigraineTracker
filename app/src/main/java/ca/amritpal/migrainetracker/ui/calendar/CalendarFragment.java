@@ -13,6 +13,7 @@ import android.widget.CalendarView;
 import android.widget.Toast;
 
 import ca.amritpal.migrainetracker.R;
+import ca.amritpal.migrainetracker.ui.entry.JournalFragment;
 
 import static android.widget.Toast.makeText;
 
@@ -80,6 +81,8 @@ public class CalendarFragment extends Fragment {
         else {
             Log.d("mListener","mListener set to null");
         }
+
+
     }
 
     @Override
