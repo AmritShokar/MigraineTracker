@@ -25,17 +25,31 @@
         />
 
     <TextView
-        android:id="@+id/tester"
+        android:id="@+id/calendar_entry_title"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="39"
-        android:text="@string/journal_title"
+        android:layout_weight="5"
+        android:text="@string/calendar_entry_check"
+        android:textAlignment="center"
+        android:paddingTop="5dp"
         />
+
+    <TextView
+        android:id="@+id/calendar_entry_check"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:text="@string/calendar_entry_initial"
+        android:textAlignment="center"
+        android:paddingTop="5dp"
+        />
+
     <Button
         android:id="@+id/edit_journal_button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10"/>
+        android:layout_weight="10"
+        android:text="@string/tester_fragment_text"/>
 
 
 

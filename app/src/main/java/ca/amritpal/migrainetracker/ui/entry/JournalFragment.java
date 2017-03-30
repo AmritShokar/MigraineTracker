@@ -36,6 +36,9 @@ public class JournalFragment extends Fragment {
     private SeekBar mMoodSlider;
     private Date now;
     private String newDateFormat;
+    private int daySelect;
+    private int monthSelect;
+    private int yearSelect;
 
     public JournalFragment() {
         // Required empty public constructor
@@ -44,10 +47,6 @@ public class JournalFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        now = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        newDateFormat = dateFormat.format(now);
-        System.out.println(newDateFormat);
     }
 
     @Override
@@ -55,6 +54,11 @@ public class JournalFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.journal_fragment, container, false);
+
+        daySelect = getArguments().getInt("day");
+        monthSelect = getArguments().getInt("month");
+        yearSelect = getArguments().getInt("year");
+        newDateFormat = daySelect+"-"+monthSelect+"-"+yearSelect;
 
         mDateView = (TextView) view.findViewById(R.id.journal_entry_date);
         Calendar currDate = Calendar.getInstance();

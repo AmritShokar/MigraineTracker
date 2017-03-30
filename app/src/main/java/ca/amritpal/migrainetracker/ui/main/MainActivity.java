@@ -8,7 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.facebook.stetho.Stetho;
+
 import ca.amritpal.migrainetracker.R;
+import ca.amritpal.migrainetracker.data.EntryDatabaseHelper;
 import ca.amritpal.migrainetracker.ui.calendar.CalendarFragment;
 import ca.amritpal.migrainetracker.ui.entry.JournalFragment;
 
@@ -20,6 +23,11 @@ public class MainActivity extends AppCompatActivity implements CalendarFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Stetho.initializeWithDefaults(this);
+
+        //EntryDatabaseHelper helper = EntryDatabaseHelper.getInstance(getApplicationContext());
+        //helper.clearEntries();
 
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -59,10 +67,19 @@ public class MainActivity extends AppCompatActivity implements CalendarFragment.
     }
 
     @Override
-    public void onEditJournal(Uri uri) {
+    public void onEditJournal(int day, int month, int year) {
         Log.d("FragmentInteraction","Calendar test succeeded");
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_layout_container, new JournalFragment());
+
+        Log.d("FragmentTransaction", "Journal fragment start: "+day+"-"+month+"-"+year);
+        Bundle bundle = new Bundle();
+        bundle.putInt("day", day);
+        bundle.putInt("month", month);
+        bundle.putInt("year", year);
+        JournalFragment journalFragment = new JournalFragment();
+        journalFragment.setArguments(bundle);
+
+        fragmentTransaction.replace(R.id.main_layout_container, journalFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

@@ -82,6 +82,7 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
     public void addEntry(Entry entry) {
         // Create and/or open the database for writing
         SQLiteDatabase db = getWritableDatabase();
+        boolean exists = false;
 
         db.beginTransaction();
         try {
@@ -100,4 +101,43 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean checkForEntry(String selectedDate) {
+        SQLiteDatabase db = getWritableDatabase();
+        boolean entryExists = false;
+
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_ENTRY_DATE, selectedDate);
+
+            int rows = db.update(TABLE_ENTRY, values, KEY_ENTRY_DATE+"=?", new String[]{selectedDate});
+
+            if (rows==1) {
+                entryExists = true;
+            }
+
+        } catch (Exception e) {
+            Log.d("SQLite","Error while checking for selected date");
+        } finally {
+            db.endTransaction();
+        }
+
+        return entryExists;
+    }
+
+    public void clearEntries() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            // Order of deletions is important when foreign key relationships exist.
+            db.delete(TABLE_ENTRY, null, null);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d("SQLite", "Error while trying to delete all entries");
+        } finally {
+            db.endTransaction();
+        }
+    }
 }
+
+

@@ -10,12 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import ca.amritpal.migrainetracker.R;
+import ca.amritpal.migrainetracker.data.EntryDatabaseHelper;
 import ca.amritpal.migrainetracker.ui.entry.JournalFragment;
 
 import static android.widget.Toast.makeText;
@@ -33,6 +35,10 @@ public class CalendarFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private CalendarView mCalendarView;
     private Button mEditJournalButton;
+    private TextView mCheckLabel;
+    private int lastSelectDay;
+    private int lastSelectMonth;
+    private int lastSelectYear;
 
     private OnEditJournalEntryListener mListener;
 
@@ -57,10 +63,14 @@ public class CalendarFragment extends Fragment {
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+
+                lastSelectDay = dayOfMonth;
+                lastSelectMonth = month+1;
+                lastSelectYear = year;
                 Toast selectedDateToast = Toast.makeText(getActivity(), "DayOfMonth: "+dayOfMonth, Toast.LENGTH_SHORT);
                 selectedDateToast.show();
-                checkSelectedDate();
-                //Log.d("Calendar", "Date Selected");
+                //Log.d("Calendar", dayOfMonth+"-"+(month+1)+"-"+year);
+                checkSelectedDate(dayOfMonth,month+1,year);
             }
         });
 
@@ -69,18 +79,20 @@ public class CalendarFragment extends Fragment {
         mEditJournalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onButtonPressed(Uri.parse("http://test.com"));
+                onButtonPressed();
             }
         });
+
+        mCheckLabel = (TextView) mCalendarFragmentView.findViewById(R.id.calendar_entry_check);
 
         // Inflate the layout for this fragment
         return mCalendarFragmentView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed() {
         if (mListener != null) {
-            mListener.onEditJournal(uri);
+            mListener.onEditJournal(lastSelectDay, lastSelectMonth, lastSelectYear);
         }
         else {
             Log.d("mListener","mListener set to null");
@@ -124,19 +136,18 @@ public class CalendarFragment extends Fragment {
         super.onDestroy();
     }
 
-    public void checkSelectedDate() {
+    public void checkSelectedDate(int dayOfMonth, int month, int year) {
 
-        mCalendarView.get
-
-        long selectedDateLong = mCalendarView.getDate();
-        Date selectedDate = new Date(selectedDateLong);
-
-        int day = selectedDate.getDay();
-        int month = selectedDate.getMonth();
-        int year = selectedDate.getYear();
-
-        Log.d("Calendar",day+"-"+month+"-"+year);
-
+        EntryDatabaseHelper helper = EntryDatabaseHelper.getInstance(getContext());
+        String dbDateFormat = dayOfMonth+"-"+month+"-"+year;
+        boolean entryExists = helper.checkForEntry(dbDateFormat);
+        //Log.d("DateSelect","date exists calfrag: "+entryExists+" "+month);
+        if (entryExists) {
+            mCheckLabel.setText(R.string.calendar_entry_exists);
+        }
+        else {
+            mCheckLabel.setText(R.string.calendar_entry_new);
+        }
     }
     /**
      * This interface must be implemented by activities that contain this
@@ -150,6 +161,6 @@ public class CalendarFragment extends Fragment {
      */
     public interface OnEditJournalEntryListener {
         // TODO: Update argument type and name
-        void onEditJournal(Uri uri);
+        void onEditJournal(int day, int month, int year);
     }
 }
