@@ -5,15 +5,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import ca.amritpal.migrainetracker.R;
+import ca.amritpal.migrainetracker.data.Entry;
+import ca.amritpal.migrainetracker.data.EntryDatabaseHelper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +33,9 @@ public class JournalFragment extends Fragment {
 
     private OnFinishedJournalEntryListener mListener;
     private TextView mDateView;
+    private SeekBar mMoodSlider;
+    private Date now;
+    private String newDateFormat;
 
     public JournalFragment() {
         // Required empty public constructor
@@ -36,6 +44,10 @@ public class JournalFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        now = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        newDateFormat = dateFormat.format(now);
+        System.out.println(newDateFormat);
     }
 
     @Override
@@ -49,6 +61,9 @@ public class JournalFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("E MMM dd, yyyy");
         String currDateText = sdf.format(currDate.getTime());
         mDateView.setText(currDateText);
+
+        mMoodSlider = (SeekBar) view.findViewById(R.id.mood_slider);
+        //mMoodSlider.setProgress(5);
 
         // Inflate the layout for this fragment
         return view;
@@ -76,6 +91,22 @@ public class JournalFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        Entry entry = new Entry(newDateFormat, mMoodSlider.getProgress());
+        EntryDatabaseHelper helper = EntryDatabaseHelper.getInstance(getContext());
+        helper.addEntry(entry);
+
+        Log.d("Lifecycle","Journal Fragment stopped");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     /**

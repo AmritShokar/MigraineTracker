@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.Toast;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import ca.amritpal.migrainetracker.R;
 import ca.amritpal.migrainetracker.ui.entry.JournalFragment;
 
@@ -56,7 +59,8 @@ public class CalendarFragment extends Fragment {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 Toast selectedDateToast = Toast.makeText(getActivity(), "DayOfMonth: "+dayOfMonth, Toast.LENGTH_SHORT);
                 selectedDateToast.show();
-                Log.d("Calendar", "Date Selected");
+                checkSelectedDate();
+                //Log.d("Calendar", "Date Selected");
             }
         });
 
@@ -81,8 +85,6 @@ public class CalendarFragment extends Fragment {
         else {
             Log.d("mListener","mListener set to null");
         }
-
-
     }
 
     @Override
@@ -102,6 +104,40 @@ public class CalendarFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    public void checkSelectedDate() {
+
+        mCalendarView.get
+
+        long selectedDateLong = mCalendarView.getDate();
+        Date selectedDate = new Date(selectedDateLong);
+
+        int day = selectedDate.getDay();
+        int month = selectedDate.getMonth();
+        int year = selectedDate.getYear();
+
+        Log.d("Calendar",day+"-"+month+"-"+year);
+
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
