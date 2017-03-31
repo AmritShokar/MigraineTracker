@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements CalendarFragment.
     }
 
     @Override
-    public void onEditJournal(int day, int month, int year) {
+    public void onEditJournal(int day, int month, int year, boolean entryExists) {
         Log.d("FragmentInteraction","Calendar test succeeded");
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements CalendarFragment.
         bundle.putInt("day", day);
         bundle.putInt("month", month);
         bundle.putInt("year", year);
+        bundle.putBoolean("exists", entryExists);
         JournalFragment journalFragment = new JournalFragment();
         journalFragment.setArguments(bundle);
 

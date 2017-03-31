@@ -39,6 +39,7 @@ public class CalendarFragment extends Fragment {
     private int lastSelectDay;
     private int lastSelectMonth;
     private int lastSelectYear;
+    private boolean entryExists;
 
     private OnEditJournalEntryListener mListener;
 
@@ -92,7 +93,7 @@ public class CalendarFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed() {
         if (mListener != null) {
-            mListener.onEditJournal(lastSelectDay, lastSelectMonth, lastSelectYear);
+            mListener.onEditJournal(lastSelectDay, lastSelectMonth, lastSelectYear, entryExists);
         }
         else {
             Log.d("mListener","mListener set to null");
@@ -140,7 +141,7 @@ public class CalendarFragment extends Fragment {
 
         EntryDatabaseHelper helper = EntryDatabaseHelper.getInstance(getContext());
         String dbDateFormat = dayOfMonth+"-"+month+"-"+year;
-        boolean entryExists = helper.checkForEntry(dbDateFormat);
+        entryExists = helper.checkForEntry(dbDateFormat);
         //Log.d("DateSelect","date exists calfrag: "+entryExists+" "+month);
         if (entryExists) {
             mCheckLabel.setText(R.string.calendar_entry_exists);
@@ -161,6 +162,6 @@ public class CalendarFragment extends Fragment {
      */
     public interface OnEditJournalEntryListener {
         // TODO: Update argument type and name
-        void onEditJournal(int day, int month, int year);
+        void onEditJournal(int day, int month, int year, boolean entryExists);
     }
 }

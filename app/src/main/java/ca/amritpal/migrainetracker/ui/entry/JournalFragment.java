@@ -39,6 +39,7 @@ public class JournalFragment extends Fragment {
     private int daySelect;
     private int monthSelect;
     private int yearSelect;
+    private boolean entryExists;
 
     public JournalFragment() {
         // Required empty public constructor
@@ -55,6 +56,7 @@ public class JournalFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.journal_fragment, container, false);
 
+        entryExists = getArguments().getBoolean("exists");
         daySelect = getArguments().getInt("day");
         monthSelect = getArguments().getInt("month");
         yearSelect = getArguments().getInt("year");
@@ -67,7 +69,10 @@ public class JournalFragment extends Fragment {
         mDateView.setText(currDateText);
 
         mMoodSlider = (SeekBar) view.findViewById(R.id.mood_slider);
-        //mMoodSlider.setProgress(5);
+
+        if (entryExists) {
+            setAttributes();
+        }
 
         // Inflate the layout for this fragment
         return view;
@@ -78,6 +83,13 @@ public class JournalFragment extends Fragment {
         if (mListener != null) {
             mListener.onFinishedEntry(uri);
         }
+    }
+
+    public void setAttributes() {
+        EntryDatabaseHelper helper = EntryDatabaseHelper.getInstance(getContext());
+        Entry entryData = helper.retrieveEntry(newDateFormat);
+
+        mMoodSlider.setProgress(entryData.getMoodLevel());
     }
 
     @Override
@@ -100,10 +112,17 @@ public class JournalFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-
-        Entry entry = new Entry(newDateFormat, mMoodSlider.getProgress());
         EntryDatabaseHelper helper = EntryDatabaseHelper.getInstance(getContext());
-        helper.addEntry(entry);
+        Entry entry = new Entry(newDateFormat, mMoodSlider.getProgress());
+
+        if(entryExists) {
+            //Log.d("Journal","New Mood Level: "+entry.getMoodLevel());
+            helper.updateEntry(entry);
+            Log.d("Lifecycle","Journal entry edit");
+        } else {
+            helper.addEntry(entry);
+            Log.d("Lifecycle","Journal entry new");
+        }
 
         Log.d("Lifecycle","Journal Fragment stopped");
     }

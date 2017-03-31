@@ -9,19 +9,24 @@ public class Entry {
     private String date;
     private int moodLevel;
 
+    public Entry() {}
+
     public Entry(String date, int moodLevel) {
         this.date = date;
         this.moodLevel = moodLevel;
     }
 
+    public void setDate(String date) {
+        this.date = date;
+    }
     public void setMoodLevel(int newMoodLevel) {
         this.moodLevel = newMoodLevel;
     }
-    public int getMoodLevel() {
-        return this.moodLevel;
-    }
     public String getDate() {
         return date;
+    }
+    public int getMoodLevel() {
+        return this.moodLevel;
     }
 
 }

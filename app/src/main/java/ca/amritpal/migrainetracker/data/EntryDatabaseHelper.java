@@ -2,6 +2,7 @@ package ca.amritpal.migrainetracker.data;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -101,6 +102,19 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void updateEntry(Entry updatedEntry) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_ENTRY_MOOD, updatedEntry.getMoodLevel());
+
+            int rows = db.update(TABLE_ENTRY, values, KEY_ENTRY_DATE+"=?", new String[]{updatedEntry.getDate()});
+            Log.d("SQLite", "Number of rows updated: "+rows);
+        } catch (Exception e) {
+            Log.d("SQLite","Error while trying to update existing entry");
+        }
+    }
+
     public boolean checkForEntry(String selectedDate) {
         SQLiteDatabase db = getWritableDatabase();
         boolean entryExists = false;
@@ -123,6 +137,39 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
         }
 
         return entryExists;
+    }
+
+    public Entry retrieveEntry(String date) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String ENTRY_SELECT_QUERY = String.format("SELECT * FROM %s WHERE %s.%s = '%s'",
+                TABLE_ENTRY,
+                TABLE_ENTRY, KEY_ENTRY_DATE,
+                date);
+        Cursor cursor = db.rawQuery(ENTRY_SELECT_QUERY, null);
+        Entry currEntry = null;
+
+        try {
+            if(cursor.moveToNext()) {
+                do {
+                    currEntry = new Entry();
+                    currEntry.setDate(date);
+                    int moodLevel = cursor.getInt(cursor.getColumnIndex(KEY_ENTRY_MOOD));
+                    currEntry.setMoodLevel(moodLevel);
+                } while (cursor.moveToNext());
+            }
+            else {
+                Log.d("SQLite","Entry not found");
+            }
+        } catch (Exception e) {
+            Log.d("SQLite","Error while retrieving entry data");
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+
+        return currEntry;
     }
 
     public void clearEntries() {
