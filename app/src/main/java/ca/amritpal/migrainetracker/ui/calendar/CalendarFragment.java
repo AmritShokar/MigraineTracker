@@ -3,6 +3,7 @@ package ca.amritpal.migrainetracker.ui.calendar;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,7 +35,7 @@ public class CalendarFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private CalendarView mCalendarView;
-    private Button mEditJournalButton;
+    private FloatingActionButton mEditJournalButton;
     private TextView mCheckLabel;
     private int lastSelectDay;
     private int lastSelectMonth;
@@ -75,7 +76,7 @@ public class CalendarFragment extends Fragment {
             }
         });
 
-        mEditJournalButton = (Button) mCalendarFragmentView.findViewById(R.id.edit_journal_button);
+        mEditJournalButton = (FloatingActionButton) mCalendarFragmentView.findViewById(R.id.edit_journal_button);
 
         mEditJournalButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,9 +146,11 @@ public class CalendarFragment extends Fragment {
         //Log.d("DateSelect","date exists calfrag: "+entryExists+" "+month);
         if (entryExists) {
             mCheckLabel.setText(R.string.calendar_entry_exists);
+            mEditJournalButton.setImageResource(R.drawable.ic_mode_edit_white_24dp);
         }
         else {
             mCheckLabel.setText(R.string.calendar_entry_new);
+            mEditJournalButton.setImageResource(R.drawable.ic_add_white_24dp);
         }
     }
     /**

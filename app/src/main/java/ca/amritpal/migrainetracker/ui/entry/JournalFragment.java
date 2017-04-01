@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import ca.amritpal.migrainetracker.R;
 import ca.amritpal.migrainetracker.data.Entry;
@@ -63,7 +64,8 @@ public class JournalFragment extends Fragment {
         newDateFormat = daySelect+"-"+monthSelect+"-"+yearSelect;
 
         mDateView = (TextView) view.findViewById(R.id.journal_entry_date);
-        Calendar currDate = Calendar.getInstance();
+        //Calendar currDate = Calendar.getInstance();
+        Calendar currDate = new GregorianCalendar(yearSelect, monthSelect, daySelect);
         SimpleDateFormat sdf = new SimpleDateFormat("E MMM dd, yyyy");
         String currDateText = sdf.format(currDate.getTime());
         mDateView.setText(currDateText);
