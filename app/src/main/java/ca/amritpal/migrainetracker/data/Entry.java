@@ -7,26 +7,44 @@ package ca.amritpal.migrainetracker.data;
 public class Entry {
 
     private String date;
-    private int moodLevel;
+    private int morningPainLevel;
+    private int afternoonPainLevel;
+    private int eveningPainLevel;
 
     public Entry() {}
 
-    public Entry(String date, int moodLevel) {
+    public Entry(String date, int morningPainLevel, int afternoonPainLevel, int eveningPainLevel) {
         this.date = date;
-        this.moodLevel = moodLevel;
+        this.morningPainLevel = morningPainLevel;
+        this.afternoonPainLevel = afternoonPainLevel;
+        this.eveningPainLevel = eveningPainLevel;
     }
 
     public void setDate(String date) {
         this.date = date;
     }
-    public void setMoodLevel(int newMoodLevel) {
-        this.moodLevel = newMoodLevel;
-    }
     public String getDate() {
         return date;
     }
-    public int getMoodLevel() {
-        return this.moodLevel;
+
+    public void setMorningLevel(int newMorningLevel) {
+        this.morningPainLevel = newMorningLevel;
+    }
+    public int getMorningLevel() {
+        return this.morningPainLevel;
     }
 
+    public void setAfternoonLevel(int newAfternoonLevel) {
+        this.afternoonPainLevel = newAfternoonLevel;
+    }
+    public int getAfternoonLevel() {
+        return this.afternoonPainLevel;
+    }
+
+    public void setEveningLevel(int newEveningLevel) {
+        this.eveningPainLevel = newEveningLevel;
+    }
+    public int getEveningLevel() {
+        return this.eveningPainLevel;
+    }
 }

@@ -34,8 +34,9 @@ public class JournalFragment extends Fragment {
 
     private OnFinishedJournalEntryListener mListener;
     private TextView mDateView;
-    private SeekBar mMoodSlider;
-    private Date now;
+    private SeekBar mMorningSlider;
+    private SeekBar mAfternoonSlider;
+    private SeekBar mEveningSlider;
     private String newDateFormat;
     private int daySelect;
     private int monthSelect;
@@ -70,7 +71,9 @@ public class JournalFragment extends Fragment {
         String currDateText = sdf.format(currDate.getTime());
         mDateView.setText(currDateText);
 
-        mMoodSlider = (SeekBar) view.findViewById(R.id.mood_slider);
+        mMorningSlider = (SeekBar) view.findViewById(R.id.journal_morning_slider);
+        mAfternoonSlider = (SeekBar) view.findViewById(R.id.journal_afternoon_slider);
+        mEveningSlider = (SeekBar) view.findViewById(R.id.journal_evening_slider);
 
         if (entryExists) {
             setAttributes();
@@ -91,7 +94,9 @@ public class JournalFragment extends Fragment {
         EntryDatabaseHelper helper = EntryDatabaseHelper.getInstance(getContext());
         Entry entryData = helper.retrieveEntry(newDateFormat);
 
-        mMoodSlider.setProgress(entryData.getMoodLevel());
+        mMorningSlider.setProgress(entryData.getMorningLevel());
+        mAfternoonSlider.setProgress(entryData.getAfternoonLevel());
+        mEveningSlider.setProgress(entryData.getEveningLevel());
     }
 
     @Override
@@ -115,7 +120,8 @@ public class JournalFragment extends Fragment {
     public void onStop() {
         super.onStop();
         EntryDatabaseHelper helper = EntryDatabaseHelper.getInstance(getContext());
-        Entry entry = new Entry(newDateFormat, mMoodSlider.getProgress());
+        Entry entry = new Entry(newDateFormat, mMorningSlider.getProgress(), mAfternoonSlider.getProgress(),
+                mEveningSlider.getProgress());
 
         if(entryExists) {
             //Log.d("Journal","New Mood Level: "+entry.getMoodLevel());

@@ -4,6 +4,9 @@
     <string name="journal_title">Add A Journal Entry</string>
     <string name="tester_fragment_text">Just a test</string>
     <string name="journal_entry_title">Journal Entry:</string>
+    <string name="journal_entry_morning">Morning</string>
+    <string name="journal_entry_afternoon">Afternoon</string>
+    <string name="journal_entry_evening">Evening</string>
     <string name="calendar_entry_check">Entry:</string>
     <string name="calendar_entry_initial">Select A Date</string>
     <string name="calendar_entry_exists">Edit Entry</string>

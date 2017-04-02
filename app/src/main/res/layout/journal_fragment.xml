@@ -23,6 +23,15 @@
         app:layout_heightPercent="5%"
         android:layout_below="@id/journal_entry_title"/>
 
+    <TextView
+        android:id="@+id/journal_title_morning"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="@string/journal_entry_morning"
+        app:layout_heightPercent="5%"
+        android:layout_below="@id/journal_entry_date"
+        />
+
     <SeekBar
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="match_parent"
@@ -30,11 +39,60 @@
         app:layout_heightPercent="5%"
         android:max="10"
         android:progress="0"
-        android:layout_below="@+id/journal_entry_date"
-        android:id="@+id/mood_slider"
+        android:layout_below="@+id/journal_title_morning"
+        android:id="@+id/journal_morning_slider"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        />
+
+    <TextView
+        android:id="@+id/journal_title_afternoon"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="@string/journal_entry_afternoon"
+        app:layout_heightPercent="5%"
+        android:layout_below="@id/journal_morning_slider"
+        />
+
+    <SeekBar
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="5%"
+        android:max="10"
+        android:progress="0"
+        android:layout_below="@+id/journal_title_afternoon"
+        android:id="@+id/journal_afternoon_slider"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        />
+
+    <TextView
+        android:id="@+id/journal_title_evening"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="@string/journal_entry_evening"
+        app:layout_heightPercent="5%"
+        android:layout_below="@id/journal_afternoon_slider"
+        />
+
+    <SeekBar
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_heightPercent="5%"
+        android:max="10"
+        android:progress="0"
+        android:layout_below="@+id/journal_title_evening"
+        android:id="@+id/journal_evening_slider"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        />
 
 </android.support.percent.PercentRelativeLayout>
