@@ -15,7 +15,7 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
 
     // Database Info
     private static final String DATABASE_NAME = "EntryDatabase";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     // Table Names
     private static final String TABLE_ENTRY = "entries";
@@ -23,7 +23,9 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
     // Entry Table Columns
     private static final String KEY_ENTRY_ID = "id";
     private static final String KEY_ENTRY_DATE = "date";
-    private static final String KEY_ENTRY_MOOD = "mood";
+    private static final String KEY_ENTRY_MORNING = "morning";
+    private static final String KEY_ENTRY_AFTERNOON = "afternoon";
+    private static final String KEY_ENTRY_EVENING = "evening";
 
     private static EntryDatabaseHelper sInstance;
 
@@ -58,7 +60,9 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
                 "(" +
                 KEY_ENTRY_ID + " INTEGER PRIMARY KEY," + // Define a primary key
                 KEY_ENTRY_DATE + " TEXT," +
-                KEY_ENTRY_MOOD + " INTEGER " +
+                KEY_ENTRY_MORNING + " INTEGER, " +
+                KEY_ENTRY_AFTERNOON + " INTEGER, " +
+                KEY_ENTRY_EVENING + " INTEGER " +
                 ")";
 
         //Example of foreign key use
@@ -89,7 +93,9 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
         try {
             ContentValues values = new ContentValues();
             values.put(KEY_ENTRY_DATE, entry.getDate());
-            values.put(KEY_ENTRY_MOOD, entry.getMoodLevel());
+            values.put(KEY_ENTRY_MORNING, entry.getMorningLevel());
+            values.put(KEY_ENTRY_AFTERNOON, entry.getAfternoonLevel());
+            values.put(KEY_ENTRY_EVENING, entry.getEveningLevel());
 
             // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
             db.insertOrThrow(TABLE_ENTRY, null, values);
@@ -106,7 +112,9 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         try {
             ContentValues values = new ContentValues();
-            values.put(KEY_ENTRY_MOOD, updatedEntry.getMoodLevel());
+            values.put(KEY_ENTRY_MORNING, updatedEntry.getMorningLevel());
+            values.put(KEY_ENTRY_AFTERNOON, updatedEntry.getAfternoonLevel());
+            values.put(KEY_ENTRY_EVENING, updatedEntry.getEveningLevel());
 
             int rows = db.update(TABLE_ENTRY, values, KEY_ENTRY_DATE+"=?", new String[]{updatedEntry.getDate()});
             Log.d("SQLite", "Number of rows updated: "+rows);
@@ -154,8 +162,12 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
                 do {
                     currEntry = new Entry();
                     currEntry.setDate(date);
-                    int moodLevel = cursor.getInt(cursor.getColumnIndex(KEY_ENTRY_MOOD));
-                    currEntry.setMoodLevel(moodLevel);
+                    int morningLevel = cursor.getInt(cursor.getColumnIndex(KEY_ENTRY_MORNING));
+                    currEntry.setMorningLevel(morningLevel);
+                    int afternoonLevel = cursor.getInt(cursor.getColumnIndex(KEY_ENTRY_AFTERNOON));
+                    currEntry.setMorningLevel(afternoonLevel);
+                    int eveningLevel = cursor.getInt(cursor.getColumnIndex(KEY_ENTRY_EVENING));
+                    currEntry.setMorningLevel(eveningLevel);
                 } while (cursor.moveToNext());
             }
             else {
