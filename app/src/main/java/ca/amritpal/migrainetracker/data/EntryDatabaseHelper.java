@@ -165,9 +165,9 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
                     int morningLevel = cursor.getInt(cursor.getColumnIndex(KEY_ENTRY_MORNING));
                     currEntry.setMorningLevel(morningLevel);
                     int afternoonLevel = cursor.getInt(cursor.getColumnIndex(KEY_ENTRY_AFTERNOON));
-                    currEntry.setMorningLevel(afternoonLevel);
+                    currEntry.setAfternoonLevel(afternoonLevel);
                     int eveningLevel = cursor.getInt(cursor.getColumnIndex(KEY_ENTRY_EVENING));
-                    currEntry.setMorningLevel(eveningLevel);
+                    currEntry.setEveningLevel(eveningLevel);
                 } while (cursor.moveToNext());
             }
             else {

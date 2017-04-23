@@ -94,6 +94,8 @@ public class JournalFragment extends Fragment {
         EntryDatabaseHelper helper = EntryDatabaseHelper.getInstance(getContext());
         Entry entryData = helper.retrieveEntry(newDateFormat);
 
+        Log.d("setAttributes()","getMorningLevel: "+entryData.getMorningLevel()+" for "+newDateFormat);
+
         mMorningSlider.setProgress(entryData.getMorningLevel());
         mAfternoonSlider.setProgress(entryData.getAfternoonLevel());
         mEveningSlider.setProgress(entryData.getEveningLevel());
