@@ -15,10 +15,11 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
 
     // Database Info
     private static final String DATABASE_NAME = "EntryDatabase";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 7;
 
     // Table Names
-    private static final String TABLE_ENTRY = "entries";
+    private static final String TABLE_ENTRY = "entry";
+    private static final String TABLE_TRIGGER = "trigger";
 
     // Entry Table Columns
     private static final String KEY_ENTRY_ID = "id";
@@ -26,6 +27,10 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_ENTRY_MORNING = "morning";
     private static final String KEY_ENTRY_AFTERNOON = "afternoon";
     private static final String KEY_ENTRY_EVENING = "evening";
+
+    // Trigger Table Columns
+    private static final String KEY_TRIGGER_ID = "id";
+    private static final String KEY_TRIGGER_TYPE = "type";
 
     private static EntryDatabaseHelper sInstance;
 
@@ -65,10 +70,18 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
                 KEY_ENTRY_EVENING + " INTEGER " +
                 ")";
 
+        String CREATE_TRIGGER_TABLE = "CREATE TABLE " + TABLE_TRIGGER +
+                "(" +
+                KEY_TRIGGER_ID + " INTEGER PRIMARY KEY, " +
+                KEY_TRIGGER_TYPE + " TEXT " +
+                ")";
+
         //Example of foreign key use
         //KEY_POST_USER_ID_FK + " INTEGER REFERENCES " + TABLE_USERS + "," + // Define a foreign key
 
         db.execSQL(CREATE_ENTRY_TABLE);
+        db.execSQL(CREATE_TRIGGER_TABLE);
+        initializeTrigger(db);
     }
 
     // Called when the database needs to be upgraded.
@@ -79,7 +92,29 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion != newVersion) {
             // Simplest implementation is to drop all old tables and recreate them
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_ENTRY);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRIGGER);
             onCreate(db);
+        }
+    }
+
+    public void initializeTrigger(SQLiteDatabase db) {
+        String[] triggers = {"Stress", "Caffeine withdrawal", "Sleeping in",
+        "Too little sleep", "Meals", "Over or under activity", "Irregular meals",
+        "Weather change", "Specific food"};
+
+        db.beginTransaction();
+        try {
+            for(String trigger: triggers) {
+                ContentValues values = new ContentValues();
+                values.put(KEY_TRIGGER_TYPE, trigger);
+                db.insertOrThrow(TABLE_TRIGGER, null, values);
+            }
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d("SQLite", "Error while trying to add default triggers to database");
+        } finally {
+            db.endTransaction();
+            Log.d("SQLite", "Default Trigger insert transaction closed");
         }
     }
 
@@ -101,10 +136,10 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
             db.insertOrThrow(TABLE_ENTRY, null, values);
             db.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.d("SQLite", "Error while trying to add post to database");
+            Log.d("SQLite", "Error while trying to add entry to database");
         } finally {
             db.endTransaction();
-            Log.d("SQLite", "Entry insert was successful");
+            Log.d("SQLite", "Entry insert transaction closed");
         }
     }
 
