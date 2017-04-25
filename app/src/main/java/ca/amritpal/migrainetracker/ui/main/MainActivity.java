@@ -14,8 +14,10 @@ import ca.amritpal.migrainetracker.R;
 import ca.amritpal.migrainetracker.data.EntryDatabaseHelper;
 import ca.amritpal.migrainetracker.ui.calendar.CalendarFragment;
 import ca.amritpal.migrainetracker.ui.entry.JournalFragment;
+import ca.amritpal.migrainetracker.ui.list.TriggerFragment;
 
-public class MainActivity extends AppCompatActivity implements CalendarFragment.OnEditJournalEntryListener, JournalFragment.OnFinishedJournalEntryListener{
+public class MainActivity extends AppCompatActivity implements CalendarFragment.OnEditJournalEntryListener, JournalFragment.OnFinishedJournalEntryListener,
+        TriggerFragment.OnFinishedTriggerSelectionListener {
 
     FragmentManager fragmentManager;
 
@@ -87,6 +89,18 @@ public class MainActivity extends AppCompatActivity implements CalendarFragment.
 
     @Override
     public void onFinishedEntry(Uri uri) {
+        TriggerFragment triggerFragment = new TriggerFragment();
+
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_layout_container, triggerFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
         Log.d("FragmentInteraction","Journal test succeeded");
+    }
+
+    @Override
+    public void onTriggerSelection() {
+        Log.d("FragmentInteraction","Trigger test succeeded");
     }
 }

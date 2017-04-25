@@ -98,7 +98,7 @@ public class CalendarFragment extends Fragment {
         }
         else {
             Log.d("mListener","mListener set to null");
-        }
+    }
     }
 
     @Override

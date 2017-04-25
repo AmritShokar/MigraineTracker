@@ -5,13 +5,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,6 +23,7 @@ import java.util.GregorianCalendar;
 import ca.amritpal.migrainetracker.R;
 import ca.amritpal.migrainetracker.data.Entry;
 import ca.amritpal.migrainetracker.data.EntryDatabaseHelper;
+import ca.amritpal.migrainetracker.ui.list.TriggerFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +41,7 @@ public class JournalFragment extends Fragment {
     private SeekBar mMorningSlider;
     private SeekBar mAfternoonSlider;
     private SeekBar mEveningSlider;
+    private Button mTriggersButton;
     private String newDateFormat;
     private int daySelect;
     private int monthSelect;
@@ -75,6 +80,15 @@ public class JournalFragment extends Fragment {
         mAfternoonSlider = (SeekBar) view.findViewById(R.id.journal_afternoon_slider);
         mEveningSlider = (SeekBar) view.findViewById(R.id.journal_evening_slider);
 
+        mTriggersButton = (Button) view.findViewById(R.id.journal_entry_trigger_button);
+
+        mTriggersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonPressed(Uri.parse("/Trigger/Test"));
+            }
+        });
+
         if (entryExists) {
             setAttributes();
         }
@@ -88,17 +102,6 @@ public class JournalFragment extends Fragment {
         if (mListener != null) {
             mListener.onFinishedEntry(uri);
         }
-    }
-
-    public void setAttributes() {
-        EntryDatabaseHelper helper = EntryDatabaseHelper.getInstance(getContext());
-        Entry entryData = helper.retrieveEntry(newDateFormat);
-
-        Log.d("setAttributes()","getMorningLevel: "+entryData.getMorningLevel()+" for "+newDateFormat);
-
-        mMorningSlider.setProgress(entryData.getMorningLevel());
-        mAfternoonSlider.setProgress(entryData.getAfternoonLevel());
-        mEveningSlider.setProgress(entryData.getEveningLevel());
     }
 
     @Override
@@ -140,6 +143,27 @@ public class JournalFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    public void setAttributes() {
+        EntryDatabaseHelper helper = EntryDatabaseHelper.getInstance(getContext());
+        Entry entryData = helper.retrieveEntry(newDateFormat);
+
+        Log.d("setAttributes()","getMorningLevel: "+entryData.getMorningLevel()+" for "+newDateFormat);
+
+        mMorningSlider.setProgress(entryData.getMorningLevel());
+        mAfternoonSlider.setProgress(entryData.getAfternoonLevel());
+        mEveningSlider.setProgress(entryData.getEveningLevel());
+    }
+
+    public void triggerSelection() {
+        TriggerFragment triggerFragment = new TriggerFragment();
+
+        FragmentTransaction fragmentTransaction = getChildFragmentManager()
+                .beginTransaction()
+                .replace(R.id.journal_fragment, triggerFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     /**

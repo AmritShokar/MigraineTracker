@@ -11,4 +11,8 @@
     <string name="calendar_entry_initial">Select A Date</string>
     <string name="calendar_entry_exists">Edit Entry</string>
     <string name="calendar_entry_new">Create New Entry</string>
+    <string name="journal_entry_trigger">Triggers</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
