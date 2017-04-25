@@ -15,7 +15,7 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
 
     // Database Info
     private static final String DATABASE_NAME = "EntryDatabase";
-    private static final int DATABASE_VERSION = 15;
+    private static final int DATABASE_VERSION = 16;
 
     // Table Names
     private static final String TABLE_ENTRY = "entry";
@@ -29,7 +29,7 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_ENTRY_EVENING = "evening";
 
     // Trigger Table Columns
-    private static final String KEY_TRIGGER_ID = "id";
+    private static final String KEY_TRIGGER_ID = "_id";
     private static final String KEY_TRIGGER_TYPE = "type";
 
     private static EntryDatabaseHelper sInstance;

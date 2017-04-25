@@ -1,14 +1,19 @@
 package ca.amritpal.migrainetracker.ui.list;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import ca.amritpal.migrainetracker.R;
+import ca.amritpal.migrainetracker.data.EntryDatabaseHelper;
+import ca.amritpal.migrainetracker.data.adapters.TriggerCursorAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,7 +40,23 @@ public class TriggerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.trigger_fragment, container, false);
+        View view = inflater.inflate(R.layout.trigger_fragment, container, false);
+
+        // TodoDatabaseHandler is a SQLiteOpenHelper class connecting to SQLite
+        EntryDatabaseHelper helper = EntryDatabaseHelper.getInstance(getContext());
+        // Get access to the underlying writeable database
+        SQLiteDatabase db = helper.getWritableDatabase();
+        // Query for items from the database and get a cursor back
+        Cursor triggerCursor = db.rawQuery("SELECT  * FROM trigger", null);
+
+        // Find ListView to populate
+        ListView triggerItems = (ListView) view.findViewById(R.id.trigger_selection_list);
+        // Setup cursor adapter using cursor from last step
+        TriggerCursorAdapter todoAdapter = new TriggerCursorAdapter(getContext(), triggerCursor);
+        // Attach cursor adapter to the ListView
+        triggerItems.setAdapter(todoAdapter);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
