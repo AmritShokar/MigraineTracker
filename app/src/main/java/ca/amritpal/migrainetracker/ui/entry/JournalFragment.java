@@ -85,6 +85,8 @@ public class JournalFragment extends Fragment {
         mTriggersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //triggerSelection results in sub fragment insertion
+                //triggerSelection();
                 onButtonPressed(Uri.parse("/Trigger/Test"));
             }
         });
@@ -124,6 +126,13 @@ public class JournalFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+        Log.d("Lifecycle","Journal Fragment stopped");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
         EntryDatabaseHelper helper = EntryDatabaseHelper.getInstance(getContext());
         Entry entry = new Entry(newDateFormat, mMorningSlider.getProgress(), mAfternoonSlider.getProgress(),
                 mEveningSlider.getProgress());
@@ -136,13 +145,7 @@ public class JournalFragment extends Fragment {
             helper.addEntry(entry);
             Log.d("Lifecycle","Journal entry new");
         }
-
-        Log.d("Lifecycle","Journal Fragment stopped");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+        Log.d("JournalFragment","Journal Fragment Destroyed");
     }
 
     public void setAttributes() {

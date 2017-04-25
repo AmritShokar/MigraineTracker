@@ -15,7 +15,7 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
 
     // Database Info
     private static final String DATABASE_NAME = "EntryDatabase";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 15;
 
     // Table Names
     private static final String TABLE_ENTRY = "entry";
@@ -91,6 +91,7 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion != newVersion) {
             // Simplest implementation is to drop all old tables and recreate them
+            Log.d("SQLite","Databases Dropped!");
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_ENTRY);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRIGGER);
             onCreate(db);
