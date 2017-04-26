@@ -34,8 +34,10 @@ public class TriggerCursorAdapter extends CursorAdapter {
 
         // Extract properties from cursor
         String triggerType = cursor.getString(cursor.getColumnIndexOrThrow("type"));
+        int triggerId = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
 
         // Populate fields with extracted properties
         mTriggerLabel.setText(triggerType);
+        mTriggerLabel.setTag(triggerId);
     }
 }

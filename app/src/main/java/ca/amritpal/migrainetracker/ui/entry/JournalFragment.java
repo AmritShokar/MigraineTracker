@@ -87,7 +87,7 @@ public class JournalFragment extends Fragment {
             public void onClick(View v) {
                 //triggerSelection results in sub fragment insertion
                 //triggerSelection();
-                onButtonPressed(Uri.parse("/Trigger/Test"));
+                onButtonPressed(newDateFormat);
             }
         });
 
@@ -100,9 +100,9 @@ public class JournalFragment extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(String date) {
         if (mListener != null) {
-            mListener.onFinishedEntry(uri);
+            mListener.onFinishedEntry(date);
         }
     }
 
@@ -181,6 +181,6 @@ public class JournalFragment extends Fragment {
      */
     public interface OnFinishedJournalEntryListener {
         // TODO: Update argument type and name
-        void onFinishedEntry(Uri uri);
+        void onFinishedEntry(String date);
     }
 }

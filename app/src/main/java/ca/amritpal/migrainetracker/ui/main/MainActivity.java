@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements CalendarFragment.
 
     @Override
     public void onEditJournal(int day, int month, int year, boolean entryExists) {
-        Log.d("FragmentInteraction","Calendar test succeeded");
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         Log.d("FragmentTransaction", "Journal fragment start: "+day+"-"+month+"-"+year);
@@ -85,11 +84,16 @@ public class MainActivity extends AppCompatActivity implements CalendarFragment.
         fragmentTransaction.replace(R.id.main_layout_container, journalFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+
+        Log.d("FragmentInteraction","Calendar test succeeded");
     }
 
     @Override
-    public void onFinishedEntry(Uri uri) {
+    public void onFinishedEntry(String date) {
+        Bundle bundle = new Bundle();
+        bundle.putString("date", date);
         TriggerFragment triggerFragment = new TriggerFragment();
+        triggerFragment.setArguments(bundle);
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.main_layout_container, triggerFragment);

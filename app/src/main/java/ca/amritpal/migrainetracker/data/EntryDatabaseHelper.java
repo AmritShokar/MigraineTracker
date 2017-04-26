@@ -220,6 +220,10 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
         return currEntry;
     }
 
+    public void retrieveTriggerId(String date) {
+
+    }
+
     public void clearEntries() {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();

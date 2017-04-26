@@ -6,14 +6,24 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 import ca.amritpal.migrainetracker.R;
 import ca.amritpal.migrainetracker.data.EntryDatabaseHelper;
 import ca.amritpal.migrainetracker.data.adapters.TriggerCursorAdapter;
+import ca.amritpal.migrainetracker.data.models.Trigger;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +36,8 @@ import ca.amritpal.migrainetracker.data.adapters.TriggerCursorAdapter;
 public class TriggerFragment extends Fragment {
 
     private OnFinishedTriggerSelectionListener mListener;
+    private ListView triggerItems;
+    private String date;
 
     public TriggerFragment() {
         // Required empty public constructor
@@ -42,6 +54,9 @@ public class TriggerFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.trigger_fragment, container, false);
 
+        // Get selected date from bundle
+        date = getArguments().getString("date");
+
         // TodoDatabaseHandler is a SQLiteOpenHelper class connecting to SQLite
         EntryDatabaseHelper helper = EntryDatabaseHelper.getInstance(getContext());
         // Get access to the underlying writeable database
@@ -50,11 +65,11 @@ public class TriggerFragment extends Fragment {
         Cursor triggerCursor = db.rawQuery("SELECT  * FROM trigger", null);
 
         // Find ListView to populate
-        ListView triggerItems = (ListView) view.findViewById(R.id.trigger_selection_list);
+        triggerItems = (ListView) view.findViewById(R.id.trigger_selection_list);
         // Setup cursor adapter using cursor from last step
-        TriggerCursorAdapter todoAdapter = new TriggerCursorAdapter(getContext(), triggerCursor);
+        TriggerCursorAdapter triggerAdapter = new TriggerCursorAdapter(getContext(), triggerCursor);
         // Attach cursor adapter to the ListView
-        triggerItems.setAdapter(todoAdapter);
+        triggerItems.setAdapter(triggerAdapter);
 
         return view;
     }
@@ -96,7 +111,30 @@ public class TriggerFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //getFragmentManager().popBackStack();
+        // Create collection to hold ids of selected triggers
+        Collection triggersChecked = new ArrayList<Integer>();
+
+        // Insert selected trigger ids into collection
+        for(int i=0; i<triggerItems.getCount(); i++) {
+            View v = triggerItems.getChildAt(i);
+
+            CheckBox triggerCheckBox = (CheckBox) v.findViewById(R.id.trigger_selection_checkbox);
+
+            TextView triggerLabel = (TextView) v.findViewById(R.id.trigger_selection_label);
+
+            if(triggerCheckBox.isChecked()) {
+                int trigId = (Integer) triggerLabel.getTag();
+                triggersChecked.add(trigId);
+            }
+        }
+        Gson gson = new Gson();
+        Log.d("TriggerFragment",gson.toJson(triggersChecked));
+        // Collection serialized for Object persistence
+        String triggersCheckedJson = gson.toJson(triggersChecked);
+        Trigger triggersForDate = new Trigger(date, triggersCheckedJson);
+
+        // Create Intent to store trigger object
+
     }
 
     /**
