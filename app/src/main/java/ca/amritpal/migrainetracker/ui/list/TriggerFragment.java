@@ -1,6 +1,7 @@
 package ca.amritpal.migrainetracker.ui.list;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -23,6 +24,7 @@ import java.util.Collection;
 import ca.amritpal.migrainetracker.R;
 import ca.amritpal.migrainetracker.data.EntryDatabaseHelper;
 import ca.amritpal.migrainetracker.data.adapters.TriggerCursorAdapter;
+import ca.amritpal.migrainetracker.data.helpers.InsertTriggerIntentService;
 import ca.amritpal.migrainetracker.data.models.Trigger;
 
 /**
@@ -134,7 +136,9 @@ public class TriggerFragment extends Fragment {
         Trigger triggersForDate = new Trigger(date, triggersCheckedJson);
 
         // Create Intent to store trigger object
-
+        Intent i = new Intent(getContext(), InsertTriggerIntentService.class);
+        i.putExtra("tester","Test Trigger Intent Service Success");
+        getActivity().startService(i);
     }
 
     /**
