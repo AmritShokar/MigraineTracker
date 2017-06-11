@@ -121,7 +121,6 @@ public class TriggerFragment extends Fragment {
             View v = triggerItems.getChildAt(i);
 
             CheckBox triggerCheckBox = (CheckBox) v.findViewById(R.id.trigger_selection_checkbox);
-
             TextView triggerLabel = (TextView) v.findViewById(R.id.trigger_selection_label);
 
             if(triggerCheckBox.isChecked()) {
