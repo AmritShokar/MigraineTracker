@@ -4,11 +4,13 @@ package ca.amritpal.migrainetracker.data.models;
  * Created by Amrit on 2017-04-25.
  */
 
-public class Trigger {
+public class SelectedTrigger {
     String date;
     String ids;
 
-    public Trigger(String date, String ids) {
+    public SelectedTrigger() {}
+
+    public SelectedTrigger(String date, String ids) {
         this.date = date;
         this.ids = ids;
     }

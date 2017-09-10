@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import ca.amritpal.migrainetracker.data.models.SelectedTrigger;
+
 /**
  * Created by amrit on 3/29/2017.
  */
@@ -15,7 +17,7 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
 
     // Database Info
     private static final String DATABASE_NAME = "EntryDatabase";
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 20;
 
     // Table Names
     private static final String TABLE_ENTRY = "entry";
@@ -29,11 +31,14 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_ENTRY_AFTERNOON = "afternoon";
     private static final String KEY_ENTRY_EVENING = "evening";
 
-    // Trigger Table Columns
+    // SelectedTrigger Table Columns
     private static final String KEY_TRIGGER_ID = "_id";
     private static final String KEY_TRIGGER_TYPE = "type";
 
-    // Selected Trigger Table Columns
+    // Selected SelectedTrigger Table Columns
+    private static final String KEY_TRIGGER_SELECT_ID = "_id";
+    private static final String KEY_TRIGGER_SELECT_DATE = "date";
+    private static final String KEY_TRIGGER_SELECT_SELECTED = "selected";
 
     private static EntryDatabaseHelper sInstance;
 
@@ -79,11 +84,19 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
                 KEY_TRIGGER_TYPE + " TEXT " +
                 ")";
 
+        String CREATE_TRIGGER_SELECT_TABLE = "CREATE TABLE " + TABLE_TRIGGER_SELECT +
+                "(" +
+                KEY_TRIGGER_SELECT_ID + " INTEGER PRIMARY KEY, " +
+                KEY_TRIGGER_SELECT_DATE + " TEXT, " +
+                KEY_TRIGGER_SELECT_SELECTED + " TEXT " +
+                ")";
+
         //Example of foreign key use
         //KEY_POST_USER_ID_FK + " INTEGER REFERENCES " + TABLE_USERS + "," + // Define a foreign key
 
         db.execSQL(CREATE_ENTRY_TABLE);
         db.execSQL(CREATE_TRIGGER_TABLE);
+        db.execSQL(CREATE_TRIGGER_SELECT_TABLE);
         initializeTrigger(db);
     }
 
@@ -97,6 +110,7 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
             Log.d("SQLite","Databases Dropped!");
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_ENTRY);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRIGGER);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRIGGER_SELECT);
             onCreate(db);
         }
     }
@@ -118,11 +132,11 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
             Log.d("SQLite", "Error while trying to add default triggers to database");
         } finally {
             db.endTransaction();
-            Log.d("SQLite", "Default Trigger insert transaction closed");
+            Log.d("SQLite", "Default SelectedTrigger insert transaction closed");
         }
     }
 
-    // Insert a post into the database
+    // Insert a journal entry into the database
     public void addEntry(Entry entry) {
         // Create and/or open the database for writing
         SQLiteDatabase db = getWritableDatabase();
@@ -239,6 +253,97 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
+    }
+
+    public void addSelectedTriggers(SelectedTrigger selectedTrigger) {
+        // Create and/or open the database for writing
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_TRIGGER_SELECT_DATE, selectedTrigger.getDate());
+            values.put(KEY_TRIGGER_SELECT_SELECTED, selectedTrigger.getIds());
+
+            // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
+            db.insertOrThrow(TABLE_TRIGGER_SELECT, null, values);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d("SQLite", "Error while trying to add selected triggers to database");
+        } finally {
+            db.endTransaction();
+            Log.d("SQLite", "Selected Trigger insert transaction closed");
+        }
+    }
+
+    public SelectedTrigger retrieveSelectedTriggers(String date) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String ENTRY_SELECT_QUERY = String.format("SELECT * FROM %s WHERE %s.%s = '%s'",
+                TABLE_TRIGGER_SELECT,
+                TABLE_TRIGGER_SELECT, KEY_TRIGGER_SELECT_DATE,
+                date);
+        Cursor cursor = db.rawQuery(ENTRY_SELECT_QUERY, null);
+        SelectedTrigger currSelTrig = null;
+
+        try {
+            if(cursor.moveToNext()) {
+                do {
+                    currSelTrig = new SelectedTrigger();
+                    currSelTrig.setDate(date);
+                    String selectedTriggers= cursor.getString(cursor.getColumnIndex(KEY_TRIGGER_SELECT_SELECTED));
+                    currSelTrig.setIds(selectedTriggers);
+                } while (cursor.moveToNext());
+            }
+            else {
+                Log.d("SQLite","Selected Triggers not found");
+            }
+        } catch (Exception e) {
+            Log.d("SQLite","Error while retrieving selected trigger data");
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+
+        return currSelTrig;
+    }
+
+    public void updateSelectedTrigger(SelectedTrigger updatedSelectedTrigger) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_ENTRY_MORNING, updatedSelectedTrigger.getIds());
+
+            int rows = db.update(TABLE_TRIGGER_SELECT, values, KEY_TRIGGER_SELECT_DATE+"=?", new String[]{updatedSelectedTrigger.getDate()});
+            Log.d("SQLite", "Number of rows updated: "+rows);
+        } catch (Exception e) {
+            Log.d("SQLite","Error while trying to update existing selected trigger");
+        }
+    }
+
+    public boolean checkForSelectedTrigger(String selectedDate) {
+        SQLiteDatabase db = getWritableDatabase();
+        boolean selectedTriggerExists = false;
+
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_TRIGGER_SELECT_DATE, selectedDate);
+
+            int rows = db.update(TABLE_TRIGGER_SELECT, values, KEY_TRIGGER_SELECT_DATE+"=?", new String[]{selectedDate});
+
+            if (rows==1) {
+                selectedTriggerExists = true;
+            }
+
+        } catch (Exception e) {
+            Log.d("SQLite","Error while checking for selected date");
+        } finally {
+            db.endTransaction();
+        }
+
+        return selectedTriggerExists;
     }
 }
 

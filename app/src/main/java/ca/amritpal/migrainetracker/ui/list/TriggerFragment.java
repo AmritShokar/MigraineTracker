@@ -16,7 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +24,7 @@ import ca.amritpal.migrainetracker.R;
 import ca.amritpal.migrainetracker.data.EntryDatabaseHelper;
 import ca.amritpal.migrainetracker.data.adapters.TriggerCursorAdapter;
 import ca.amritpal.migrainetracker.data.helpers.InsertTriggerIntentService;
-import ca.amritpal.migrainetracker.data.models.Trigger;
+import ca.amritpal.migrainetracker.data.models.SelectedTrigger;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -132,11 +131,13 @@ public class TriggerFragment extends Fragment {
         Log.d("TriggerFragment",gson.toJson(triggersChecked));
         // Collection serialized for Object persistence
         String triggersCheckedJson = gson.toJson(triggersChecked);
-        Trigger triggersForDate = new Trigger(date, triggersCheckedJson);
+//        SelectedTrigger triggersForDate = new SelectedTrigger(date, triggersCheckedJson);
 
         // Create Intent to store trigger object
         Intent i = new Intent(getContext(), InsertTriggerIntentService.class);
-        i.putExtra("tester","Test Trigger Intent Service Success");
+//        i.putExtra("tester","Test SelectedTrigger Intent Service Success");
+        i.putExtra("triggers",triggersCheckedJson);
+        i.putExtra("date", date);
         getActivity().startService(i);
     }
 

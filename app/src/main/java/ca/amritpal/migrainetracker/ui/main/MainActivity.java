@@ -105,6 +105,6 @@ public class MainActivity extends AppCompatActivity implements CalendarFragment.
 
     @Override
     public void onTriggerSelection() {
-        Log.d("FragmentInteraction","Trigger test succeeded");
+        Log.d("FragmentInteraction","SelectedTrigger test succeeded");
     }
 }
