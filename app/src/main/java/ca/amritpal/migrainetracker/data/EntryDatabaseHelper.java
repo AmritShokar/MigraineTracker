@@ -20,6 +20,7 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
     // Table Names
     private static final String TABLE_ENTRY = "entry";
     private static final String TABLE_TRIGGER = "trigger";
+    private static final String TABLE_TRIGGER_SELECT = "trigger_select";
 
     // Entry Table Columns
     private static final String KEY_ENTRY_ID = "id";
@@ -31,6 +32,8 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
     // Trigger Table Columns
     private static final String KEY_TRIGGER_ID = "_id";
     private static final String KEY_TRIGGER_TYPE = "type";
+
+    // Selected Trigger Table Columns
 
     private static EntryDatabaseHelper sInstance;
 
