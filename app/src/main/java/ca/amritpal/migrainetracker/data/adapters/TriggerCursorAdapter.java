@@ -3,6 +3,7 @@ package ca.amritpal.migrainetracker.data.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,17 @@ import ca.amritpal.migrainetracker.R;
 
 public class TriggerCursorAdapter extends CursorAdapter {
 
+    int [] triggerIds;
+    boolean triggerExists = false;
+
     public TriggerCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
+    }
+
+    public TriggerCursorAdapter(Context context, Cursor cursor, int[] triggerIds, boolean triggerExists) {
+        super(context, cursor, 0);
+        this.triggerIds = triggerIds;
+        this.triggerExists = triggerExists;
     }
 
     @Override
@@ -39,5 +49,25 @@ public class TriggerCursorAdapter extends CursorAdapter {
         // Populate fields with extracted properties
         mTriggerLabel.setText(triggerType);
         mTriggerLabel.setTag(triggerId);
+
+        //Log.d("TriggerFragment", "Outside Loop: "+triggerItems.getChildCount());
+        //for(int i = 0; i < triggerItems.getChildCount(); i++) {
+            //Log.d("TriggerFragment", "Inside Loop");
+            //View item = triggerItems.getChildAt(i);
+            //CheckBox checkBox = (CheckBox) item.findViewById(R.id.trigger_selection_checkbox);
+            //Log.d("TriggerFragment", "CheckBox Id: "+checkBox.getId());
+        Log.d("TriggerCursorAdapter", "Current list item trigger: "+triggerId);
+        if(triggerExists) {
+            mTriggerCheckbox.setChecked(false);
+            for (int trig : triggerIds) {
+                if (trig == triggerId) {
+                    Log.d("TriggerCursorAdapter", "triggerId: "+trig+" "+triggerId);
+                    mTriggerCheckbox.setChecked(true);
+                    //Log.d("TriggerFragment", "Selected Trigger match");
+                    break;
+                }
+            }
+        }
+        //}
     }
 }

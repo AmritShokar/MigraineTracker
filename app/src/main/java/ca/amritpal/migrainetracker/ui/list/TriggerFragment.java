@@ -24,6 +24,7 @@ import ca.amritpal.migrainetracker.R;
 import ca.amritpal.migrainetracker.data.EntryDatabaseHelper;
 import ca.amritpal.migrainetracker.data.adapters.TriggerCursorAdapter;
 import ca.amritpal.migrainetracker.data.helpers.InsertTriggerIntentService;
+import ca.amritpal.migrainetracker.data.helpers.TriggerConversion;
 import ca.amritpal.migrainetracker.data.models.SelectedTrigger;
 
 /**
@@ -39,6 +40,7 @@ public class TriggerFragment extends Fragment {
     private OnFinishedTriggerSelectionListener mListener;
     private ListView triggerItems;
     private String date;
+    private boolean triggerExists;
 
     public TriggerFragment() {
         // Required empty public constructor
@@ -65,12 +67,31 @@ public class TriggerFragment extends Fragment {
         // Query for items from the database and get a cursor back
         Cursor triggerCursor = db.rawQuery("SELECT  * FROM trigger", null);
 
-        // Find ListView to populate
-        triggerItems = (ListView) view.findViewById(R.id.trigger_selection_list);
-        // Setup cursor adapter using cursor from last step
-        TriggerCursorAdapter triggerAdapter = new TriggerCursorAdapter(getContext(), triggerCursor);
-        // Attach cursor adapter to the ListView
-        triggerItems.setAdapter(triggerAdapter);
+        // Check if selected triggers already exist
+        triggerExists = helper.checkForSelectedTrigger(date);
+        Log.d("TriggerFragment", "TriggerExists: "+triggerExists);
+
+        if(triggerExists) {
+            SelectedTrigger currSelTrig = helper.retrieveSelectedTriggers(date);
+            Log.d("TriggerFragment", "Current Selected Triggers: "+currSelTrig.getIds());
+            int[] triggerIds = TriggerConversion.StringToIntArray(currSelTrig);
+
+            // Find ListView to populate
+            triggerItems = (ListView) view.findViewById(R.id.trigger_selection_list);
+            // Setup cursor adapter using cursor from last step
+            TriggerCursorAdapter triggerAdapter = new TriggerCursorAdapter(getContext(), triggerCursor, triggerIds, triggerExists);
+            // Attach cursor adapter to the ListView
+            triggerItems.setAdapter(triggerAdapter);
+        } else {
+            // Find ListView to populate
+            triggerItems = (ListView) view.findViewById(R.id.trigger_selection_list);
+            // Setup cursor adapter using cursor from last step
+            TriggerCursorAdapter triggerAdapter = new TriggerCursorAdapter(getContext(), triggerCursor);
+            // Attach cursor adapter to the ListView
+            triggerItems.setAdapter(triggerAdapter);
+        }
+
+
 
         return view;
     }

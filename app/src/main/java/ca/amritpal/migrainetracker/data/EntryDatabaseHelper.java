@@ -17,7 +17,7 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
 
     // Database Info
     private static final String DATABASE_NAME = "EntryDatabase";
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 21;
 
     // Table Names
     private static final String TABLE_ENTRY = "entry";
@@ -31,11 +31,11 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_ENTRY_AFTERNOON = "afternoon";
     private static final String KEY_ENTRY_EVENING = "evening";
 
-    // SelectedTrigger Table Columns
+    // Trigger Table Columns
     private static final String KEY_TRIGGER_ID = "_id";
     private static final String KEY_TRIGGER_TYPE = "type";
 
-    // Selected SelectedTrigger Table Columns
+    // Selected Trigger Table Columns
     private static final String KEY_TRIGGER_SELECT_ID = "_id";
     private static final String KEY_TRIGGER_SELECT_DATE = "date";
     private static final String KEY_TRIGGER_SELECT_SELECTED = "selected";
