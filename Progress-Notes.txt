@@ -1,0 +1,3 @@
+Migraine Tracker App Notes:
+May 2 2018:
+	When backing out of trigger fragment with an already saved trigger list a new trigger entry is made for the selected date. The duplicate entry causes the cursor to not load any saved trigger entries. The existing entry for that particular date must be updated. Duplicate selected trigger entries must not exist for the same date.

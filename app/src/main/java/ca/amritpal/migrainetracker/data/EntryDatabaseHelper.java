@@ -17,7 +17,7 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
 
     // Database Info
     private static final String DATABASE_NAME = "EntryDatabase";
-    private static final int DATABASE_VERSION = 21;
+    private static final int DATABASE_VERSION = 22;
 
     // Table Names
     private static final String TABLE_ENTRY = "entry";
@@ -136,6 +136,8 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    //-----------Entry Methods------------------------------//
+
     // Insert a journal entry into the database
     public void addEntry(Entry entry) {
         // Create and/or open the database for writing
@@ -237,6 +239,8 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
         return currEntry;
     }
 
+    //-----------Trigger Methods------------------------------//
+
     public void retrieveTriggerId(String date) {
 
     }
@@ -255,6 +259,10 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Saves Ids of selected triggers to database
+     * @param selectedTrigger
+     */
     public void addSelectedTriggers(SelectedTrigger selectedTrigger) {
         // Create and/or open the database for writing
         SQLiteDatabase db = getWritableDatabase();
@@ -276,6 +284,11 @@ public class EntryDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Retrieve selected triggers from database in order to populate trigger list
+     * @param date
+     * @return SelectedTrigger
+     */
     public SelectedTrigger retrieveSelectedTriggers(String date) {
         SQLiteDatabase db = getReadableDatabase();
 

@@ -144,6 +144,7 @@ public class TriggerFragment extends Fragment {
             TextView triggerLabel = (TextView) v.findViewById(R.id.trigger_selection_label);
 
             if(triggerCheckBox.isChecked()) {
+                Log.d("TriggerFragment", "Selected trigger being saved: "+triggerLabel.toString());
                 int trigId = (Integer) triggerLabel.getTag();
                 triggersChecked.add(trigId);
             }
