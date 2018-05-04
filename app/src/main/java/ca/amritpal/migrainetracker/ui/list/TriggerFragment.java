@@ -25,6 +25,7 @@ import ca.amritpal.migrainetracker.data.EntryDatabaseHelper;
 import ca.amritpal.migrainetracker.data.adapters.TriggerCursorAdapter;
 import ca.amritpal.migrainetracker.data.helpers.InsertTriggerIntentService;
 import ca.amritpal.migrainetracker.data.helpers.TriggerConversion;
+import ca.amritpal.migrainetracker.data.helpers.UpdateTriggerIntentService;
 import ca.amritpal.migrainetracker.data.models.SelectedTrigger;
 
 /**
@@ -156,7 +157,12 @@ public class TriggerFragment extends Fragment {
 //        SelectedTrigger triggersForDate = new SelectedTrigger(date, triggersCheckedJson);
 
         // Create Intent to store trigger object
-        Intent i = new Intent(getContext(), InsertTriggerIntentService.class);
+        Intent i;
+        if(triggerExists) { // Update current trigger entry
+            i = new Intent(getContext(), UpdateTriggerIntentService.class);
+        } else { // Insert new trigger entry
+            i = new Intent(getContext(), InsertTriggerIntentService.class);
+        }
 //        i.putExtra("tester","Test SelectedTrigger Intent Service Success");
         i.putExtra("triggers",triggersCheckedJson);
         i.putExtra("date", date);
